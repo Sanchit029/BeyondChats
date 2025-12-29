@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Article = require('../models/Article');
+const { scrapeAllArticles } = require('../services/scraper');
 
 // GET all articles
 router.get('/', async (req, res) => {
@@ -75,6 +76,33 @@ router.delete('/:id', async (req, res) => {
     await article.deleteOne();
     res.json({ message: 'Article deleted' });
   } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// POST scrape articles from BeyondChats
+router.post('/scrape', async (req, res) => {
+  try {
+    console.log('Starting scrape...');
+    const articles = await scrapeAllArticles();
+    
+    const saved = [];
+    for (const articleData of articles) {
+      // Check if article already exists
+      const existing = await Article.findOne({ sourceUrl: articleData.sourceUrl });
+      if (!existing) {
+        const article = new Article(articleData);
+        await article.save();
+        saved.push(article);
+      }
+    }
+    
+    res.json({ 
+      message: `Scraped ${articles.length} articles, saved ${saved.length} new`,
+      articles: saved 
+    });
+  } catch (error) {
+    console.error('Scrape error:', error);
     res.status(500).json({ message: error.message });
   }
 });
