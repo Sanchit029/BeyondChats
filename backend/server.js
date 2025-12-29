@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
+const articleRoutes = require('./routes/articles');
+
 const app = express();
 
 // Middleware
@@ -14,10 +16,12 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Basic route
+// Routes
 app.get('/', (req, res) => {
   res.json({ message: 'BeyondChat API is running' });
 });
+
+app.use('/api/articles', articleRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;
