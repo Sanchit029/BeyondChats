@@ -94,12 +94,21 @@ async function scrapeArticleContent(url) {
                      $('.date').text().trim() ||
                      $('[class*="date"]').text().trim();
     
+    // Parse date safely
+    let publishedDate = new Date();
+    if (dateText) {
+      const parsed = new Date(dateText);
+      if (!isNaN(parsed.getTime())) {
+        publishedDate = parsed;
+      }
+    }
+    
     return {
       title: title || 'Untitled',
       content: content || '',
       author: author,
       sourceUrl: url,
-      publishedDate: dateText ? new Date(dateText) : new Date()
+      publishedDate
     };
   } catch (error) {
     console.error('Error scraping article:', error.message);

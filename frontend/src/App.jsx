@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getArticles } from './services/api'
 import ArticleList from './components/ArticleList'
+import ArticleComparison from './components/ArticleComparison'
 
 function App() {
   const [articles, setArticles] = useState([])
@@ -23,6 +24,10 @@ function App() {
     }
   }
 
+  const handleBack = () => {
+    setSelectedArticle(null)
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white shadow">
@@ -41,6 +46,11 @@ function App() {
           <div className="text-center py-12">
             <p className="text-gray-500">Loading articles...</p>
           </div>
+        ) : selectedArticle ? (
+          <ArticleComparison 
+            article={selectedArticle} 
+            onBack={handleBack}
+          />
         ) : (
           <ArticleList 
             articles={articles} 
