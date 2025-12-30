@@ -1,13 +1,27 @@
 import { useState, useEffect } from 'react'
+import { getArticles } from './services/api'
+import ArticleList from './components/ArticleList'
 
 function App() {
   const [articles, setArticles] = useState([])
   const [loading, setLoading] = useState(true)
+  const [selectedArticle, setSelectedArticle] = useState(null)
 
   useEffect(() => {
-    // TODO: Fetch articles from API
-    setLoading(false)
+    fetchArticles()
   }, [])
+
+  const fetchArticles = async () => {
+    try {
+      setLoading(true)
+      const data = await getArticles()
+      setArticles(data)
+    } catch (error) {
+      console.error('Error fetching articles:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -16,14 +30,22 @@ function App() {
           <h1 className="text-3xl font-bold text-gray-900">
             BeyondChat Article Enhancer
           </h1>
+          <p className="text-gray-600 mt-1">
+            View original and AI-enhanced articles
+          </p>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto py-6 px-4">
         {loading ? (
-          <p>Loading articles...</p>
+          <div className="text-center py-12">
+            <p className="text-gray-500">Loading articles...</p>
+          </div>
         ) : (
-          <p>Articles will be displayed here</p>
+          <ArticleList 
+            articles={articles} 
+            onSelectArticle={setSelectedArticle}
+          />
         )}
       </main>
     </div>
