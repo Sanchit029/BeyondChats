@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 async function enhanceArticle(originalArticle, referenceArticles) {
   console.log('Enhancing article with Gemini AI...');
   
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
   
   // Improved prompt with better structure and examples
   const prompt = `You are an expert content writer, SEO specialist, and blog editor.
