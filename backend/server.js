@@ -8,7 +8,16 @@ const articleRoutes = require('./routes/articles');
 const app = express();
 
 // Middleware
-app.use(cors());
+// Updated CORS to allow frontend origins
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    process.env.FRONTEND_URL
+  ].filter(Boolean),
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 app.use(express.json());
 
 // MongoDB connection

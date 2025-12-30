@@ -1,18 +1,23 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+
+const api = axios.create({
+  baseURL: API_URL,
+  timeout: 10000,
+});
 
 export async function getArticles() {
-  const response = await axios.get(`${API_URL}/articles`);
+  const response = await api.get('/articles');
   return response.data;
 }
 
 export async function getArticle(id) {
-  const response = await axios.get(`${API_URL}/articles/${id}`);
+  const response = await api.get(`/articles/${id}`);
   return response.data;
 }
 
 export async function scrapeArticles() {
-  const response = await axios.post(`${API_URL}/articles/scrape`);
+  const response = await api.post('/articles/scrape');
   return response.data;
 }
