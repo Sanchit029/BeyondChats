@@ -77,16 +77,46 @@ async function scrapeArticleContent(url) {
                   $('[class*="title"]').first().text().trim() ||
                   $('title').text().trim();
     
-    // Try multiple selectors for content
-    const content = $('.entry-content').html() ||
-                    $('article').html() ||
-                    $('.post-content').html() ||
-                    $('.content').html() ||
-                    $('[class*="content"]').first().html();
+    // Remove unwanted elements before extracting content
+    $('script, style, nav, header, footer, aside, .comments, .comment, [class*="comment"], .sidebar, .navigation, .social-share, .related-posts, .author-bio, form, iframe, noscript').remove();
+    
+    // Try multiple selectors for main content area
+    let contentEl = $('.entry-content').first();
+    if (!contentEl.length) contentEl = $('article .content').first();
+    if (!contentEl.length) contentEl = $('.post-content').first();
+    if (!contentEl.length) contentEl = $('article').first();
+    if (!contentEl.length) contentEl = $('[class*="blog-content"]').first();
+    if (!contentEl.length) contentEl = $('.content').first();
+    if (!contentEl.length) contentEl = $('main').first();
+    
+    // Extract clean text content with paragraph structure
+    let content = '';
+    if (contentEl.length) {
+      // Get paragraphs and headings for structured content
+      contentEl.find('p, h2, h3, h4, li').each((i, el) => {
+        const text = $(el).text().trim();
+        if (text && text.length > 20) { // Skip very short fragments
+          content += text + '\n\n';
+        }
+      });
+    }
+    
+    // Fallback: get all text if structured extraction failed
+    if (!content || content.length < 200) {
+      content = contentEl.text().trim() || $('body').text().trim();
+      // Clean up whitespace
+      content = content.replace(/\s+/g, ' ').trim();
+    }
+    
+    // Limit content length (avoid huge pages)
+    if (content.length > 10000) {
+      content = content.substring(0, 10000) + '...';
+    }
     
     // Try to get author
-    const author = $('.author').text().trim() ||
-                   $('[class*="author"]').text().trim() ||
+    const author = $('.author-name').text().trim() ||
+                   $('.author').text().trim() ||
+                   $('[class*="author"]').first().text().trim() ||
                    'BeyondChats';
     
     // Try to get date
@@ -105,8 +135,8 @@ async function scrapeArticleContent(url) {
     
     return {
       title: title || 'Untitled',
-      content: content || '',
-      author: author,
+      content: content || 'Content could not be extracted.',
+      author: author.substring(0, 100), // Limit author length
       sourceUrl: url,
       publishedDate
     };
