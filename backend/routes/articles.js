@@ -1,17 +1,23 @@
+/**
+ * Article Routes
+ * Handles CRUD operations and scraping functionality
+ */
+
 const express = require('express');
 const router = express.Router();
 const Article = require('../models/Article');
 const { scrapeAllArticles } = require('../services/scraper');
 
-// POST scrape articles from BeyondChats (MUST be before /:id routes)
+// POST /scrape - Scrape articles from BeyondChats blog
 router.post('/scrape', async (req, res) => {
   try {
-    console.log('Starting scrape...');
+    console.log('Initiating article scraping process...');
     const articles = await scrapeAllArticles();
     
     const saved = [];
+    
+    // Save only new articles to avoid duplicates
     for (const articleData of articles) {
-      // Check if article already exists
       const existing = await Article.findOne({ sourceUrl: articleData.sourceUrl });
       if (!existing) {
         const article = new Article(articleData);
@@ -25,12 +31,12 @@ router.post('/scrape', async (req, res) => {
       articles: saved 
     });
   } catch (error) {
-    console.error('Scrape error:', error);
+    console.error('Scraping error:', error);
     res.status(500).json({ message: error.message });
   }
 });
 
-// GET all articles
+// GET / - Retrieve all articles
 router.get('/', async (req, res) => {
   try {
     const articles = await Article.find().sort({ createdAt: -1 });
@@ -40,7 +46,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET single article by id
+// GET /:id - Retrieve single article
 router.get('/:id', async (req, res) => {
   try {
     const article = await Article.findById(req.params.id);
@@ -53,7 +59,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST create new article
+// POST / - Create new article
 router.post('/', async (req, res) => {
   const article = new Article({
     title: req.body.title,

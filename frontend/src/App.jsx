@@ -1,3 +1,8 @@
+/**
+ * BeyondChat Frontend - Main Application
+ * Manages article list and comparison views
+ */
+
 import { useState, useEffect } from 'react'
 import { getArticles } from './services/api'
 import ArticleList from './components/ArticleList'

@@ -220,6 +220,6 @@ MIT License - feel free to use this code for learning
 
 ---
 
-**Built with ❤️ by Sanchit Bishnoi**
+**Developed by Sanchit Bishnoi**
 
-🔗 [GitHub](https://github.com/Sanchit029) | 📧 sanchitbishnoi029@gmail.com
+GitHub: [Sanchit029](https://github.com/Sanchit029) | Email: sanchitbishnoi029@gmail.com

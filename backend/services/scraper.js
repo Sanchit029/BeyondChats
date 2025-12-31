@@ -1,3 +1,8 @@
+/**
+ * Web Scraper Service
+ * Scrapes articles from BeyondChats blog
+ */
+
 const axios = require('axios');
 const cheerio = require('cheerio');
 
@@ -14,8 +19,7 @@ async function scrapeBlogList() {
     
     const articles = [];
     
-    // Updated selectors - tested on actual site
-    // Try multiple selectors since site structure varies
+    // Try multiple selectors to find articles
     const selectors = [
       'article',
       '.post',

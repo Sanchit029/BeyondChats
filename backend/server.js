@@ -1,3 +1,8 @@
+/**
+ * BeyondChat Backend API Server
+ * Main Express application handling article operations and web scraping
+ */
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -8,30 +13,35 @@ const articleRoutes = require('./routes/articles');
 const app = express();
 
 // Middleware
-// CORS configuration - Allow all origins for deployment
-// TODO: Restrict to specific domains in production after setting FRONTEND_URL env var
 app.use(cors({
-  origin: true, // Allow all origins temporarily
+  origin: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
 app.use(express.json());
 
-// MongoDB connection
+// Database Connection
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .then(() => console.log('✓ Connected to MongoDB'))
+  .catch(err => console.error('✗ MongoDB connection error:', err));
 
 // Routes
 app.get('/', (req, res) => {
-  res.json({ message: 'BeyondChat API is running' });
+  res.json({ 
+    message: 'BeyondChat API is running',
+    version: '1.0.0',
+    endpoints: {
+      articles: '/api/articles',
+      scrape: '/api/articles/scrape'
+    }
+  });
 });
 
 app.use('/api/articles', articleRoutes);
 
-// Start server
+// Start Server
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`✓ Server running on port ${PORT}`);
+  console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
 });
