@@ -80,7 +80,7 @@ A full-stack application that scrapes articles from BeyondChats blog, enhances t
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/Sanchit029/BeyondChat.git
+git clone https://github.com/Sanchit029/BeyondChats.git
 cd BeyondChat
 ```
 
