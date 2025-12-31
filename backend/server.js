@@ -8,24 +8,10 @@ const articleRoutes = require('./routes/articles');
 const app = express();
 
 // Middleware
-// Updated CORS to allow frontend origins
-const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:3000',
-  process.env.FRONTEND_URL
-].filter(Boolean);
-
+// CORS configuration - Allow all origins for deployment
+// TODO: Restrict to specific domains in production after setting FRONTEND_URL env var
 app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, Postman)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true, // Allow all origins temporarily
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
