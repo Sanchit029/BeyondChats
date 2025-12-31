@@ -10,7 +10,7 @@ A full-stack application that scrapes articles from BeyondChats blog, enhances t
 ## ✨ Features
 
 - 📰 **Automated Scraping** - Fetches articles from BeyondChats blog
-- 🤖 **AI Enhancement** - Uses Gemini 1.5 Flash to improve article quality
+- 🤖 **AI Enhancement** - Uses Gemini 2.5 Flash to improve article quality
 - 🔍 **Google Search Integration** - Adds context using real-time search results
 - 📊 **Side-by-Side Comparison** - View original vs enhanced content
 - 🎨 **Modern UI** - Built with React, Tailwind CSS v4, and smooth animations
